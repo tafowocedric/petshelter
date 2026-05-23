@@ -15,4 +15,32 @@ buildNumber.properties
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
-.idea
+
+src/main/resources/config.properties
+
+# Maven
+*.jar
+*.war
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.settings/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Compiled class files
+*.class
+
+# Logs
+*.log
+
+# Java
+hs_err_pid*
+
+/.idea
+db/src/main/resources/config.properties

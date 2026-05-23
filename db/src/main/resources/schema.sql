@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS adoptions (
 );
 
 
-CREATE INDEX idx_animals_status   ON animals(status);
-CREATE INDEX idx_animals_species  ON animals(species);
-CREATE INDEX idx_adoptions_client ON adoptions(client_id);
-CREATE INDEX idx_adoptions_animal ON adoptions(animal_id);
+CREATE INDEX IF NOT EXISTS idx_animals_status   ON animals(status);
+CREATE INDEX IF NOT EXISTS idx_animals_species  ON animals(species);
+CREATE INDEX IF NOT EXISTS idx_adoptions_client ON adoptions(client_id);
+CREATE INDEX IF NOT EXISTS idx_adoptions_animal ON adoptions(animal_id);

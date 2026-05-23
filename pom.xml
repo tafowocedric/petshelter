@@ -15,6 +15,7 @@
     <modules>
         <module>db</module>
         <module>app</module>
+        <module>core</module>
     </modules>
 
     <properties>

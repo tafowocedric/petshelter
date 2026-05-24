@@ -3,6 +3,7 @@ package com.petshelter;
 import com.petshelter.db.Database;
 import com.petshelter.db.DatabaseException;
 import com.petshelter.enums.Gender;
+import com.petshelter.exception.*;
 import com.petshelter.model.*;
 
 import java.math.BigDecimal;
@@ -22,6 +23,7 @@ public class Main {
             Database.start();
             printRecordCounts();
             demoDomainModel();
+            demoExceptions();
 
             System.out.println("=================================================");
             System.out.println(" Application started successfully! ✓");
@@ -68,6 +70,46 @@ public class Main {
         Adoption adoption = new Adoption(1, 2);
         Adoption.Receipt receipt = adoption.buildReceipt(animals.get(0), client);
         System.out.println("\n" + receipt.format());
+    }
+
+    private static void demoExceptions() {
+        System.out.println("\n--- Exception Hierarchy Demo ---");
+
+        // Catching the specific subclass
+        try {
+            throw new AnimalNotFoundException(42);
+        } catch (AnimalNotFoundException e) {
+            System.out.println("Caught specific:   " + e.getMessage());
+        } catch (ShelterException e) {
+            System.out.println("Caught general:    " + e.getMessage());
+        }
+
+        // Catching via the base type — works for ANY ShelterException
+        try {
+            throw new InvalidCredentialsException();
+        } catch (ShelterException e) {
+            System.out.println("Caught as base:    " + e.getClass().getSimpleName()
+                    + " — " + e.getMessage());
+        }
+
+        // Exception with cause (chained)
+        try {
+            try {
+                throw new IllegalStateException("DB down");
+            } catch (IllegalStateException root) {
+                throw new UserNotFoundException("admin lookup failed", root);
+            }
+        } catch (UserNotFoundException e) {
+            System.out.println("Chained exception: " + e.getMessage()
+                    + " (caused by: " + e.getCause().getMessage() + ")");
+        }
+
+        // Business-rule exception
+        try {
+            throw new AnimalNotAvailableException(5, "ADOPTED");
+        } catch (ShelterException e) {
+            System.out.println("Business rule:     " + e.getMessage());
+        }
     }
 
     private static void printRecordCounts() throws SQLException {

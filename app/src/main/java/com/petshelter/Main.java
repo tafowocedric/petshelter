@@ -2,13 +2,12 @@ package com.petshelter;
 
 import com.petshelter.db.Database;
 import com.petshelter.db.DatabaseException;
-import com.petshelter.enums.AnimalStatus;
-import com.petshelter.enums.Gender;
-import com.petshelter.enums.Species;
-import com.petshelter.enums.UserRole;
+import com.petshelter.enums.*;
 import com.petshelter.exception.*;
 import com.petshelter.model.*;
+import com.petshelter.repository.AdoptionRepository;
 import com.petshelter.repository.AnimalRepository;
+import com.petshelter.repository.JoinedAdoption;
 import com.petshelter.repository.UserRepository;
 
 import java.math.BigDecimal;
@@ -32,6 +31,7 @@ public class Main {
             demoExceptions();
             demoUserRepository();
             demoAnimalRepository();
+            demoAdoptionRepository();
 
             System.out.println("=================================================");
             System.out.println(" Application started successfully! ✓");
@@ -227,6 +227,83 @@ public class Main {
             boolean deleted = animalRepo.deleteById(saved.getId());
             System.out.println("Deleted: " + deleted);
             System.out.println("Total after cleanup: " + animalRepo.count());
+
+        } catch (ShelterException e) {
+            System.err.println("Repository error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private static void demoAdoptionRepository() {
+        System.out.println("\n--- AdoptionRepository Demo ---");
+
+        AnimalRepository animalRepo = new AnimalRepository();
+        UserRepository userRepo = new UserRepository();
+        AdoptionRepository adoptionRepo = new AdoptionRepository();
+
+        try {
+            // Find a client and an available animal from seed data
+            User client = userRepo.findByUsername("john_doe").orElseThrow();
+            Animal animal = animalRepo.findAvailable().get(0);
+
+            System.out.println("Using client: " + client.getDisplayName(true));
+            System.out.println("Using animal: " + animal.getInfo());
+
+            // Create a new adoption
+            Adoption adoption = new Adoption(animal.getId(), client.getId());
+            adoption.setNotes("Demo adoption from Main");
+            Adoption saved = adoptionRepo.save(adoption);
+            System.out.println("\nSaved adoption with id=" + saved.getId() + ", status=" + saved.getStatus());
+
+            // Show count
+            System.out.println("Total adoptions in DB: " + adoptionRepo.count());
+
+            // findJoinedById — single join query returns adoption + animal + client
+            Optional<JoinedAdoption> ja = adoptionRepo.findJoinedById(saved.getId());
+            ja.ifPresent(j -> {
+                System.out.println("\nJoined fetch (single round-trip):");
+                System.out.println("  " + j);
+                System.out.println("  Animal class: " + j.getAnimal().getClass().getSimpleName());
+                System.out.println("  Client class: " + j.getClient().getClass().getSimpleName());
+            });
+
+            // Filter — by status
+            System.out.println("\nPending adoptions:");
+            for (JoinedAdoption j : adoptionRepo.findJoinedByStatus(AdoptionStatus.PENDING)) {
+                System.out.println("  " + j);
+            }
+
+            // Filter — by client
+            System.out.println("\nAdoptions for client " + client.getDisplayName() + ":");
+            for (JoinedAdoption j : adoptionRepo.findJoinedByClient(client.getId())) {
+                System.out.println("  " + j);
+            }
+
+            // hasActiveAdoption — business check
+            System.out.println("\nhasActiveAdoption(" + animal.getId() + ") = "
+                    + adoptionRepo.hasActiveAdoption(animal.getId()));
+
+            // Update the status (approval flow preview)
+            User admin = userRepo.findByUsername("admin").orElseThrow();
+            saved.setStatus(AdoptionStatus.APPROVED);
+            saved.setApprovedBy(admin.getId());
+            adoptionRepo.update(saved);
+            System.out.println("\nAfter approval, status = "
+                    + adoptionRepo.findById(saved.getId()).get().getStatus());
+
+            // Build a receipt using the nested class from Phase 2
+            ja = adoptionRepo.findJoinedById(saved.getId());
+            if (ja.isPresent()) {
+                Adoption.Receipt receipt = ja.get().getAdoption()
+                        .buildReceipt(ja.get().getAnimal(), ja.get().getClient());
+                System.out.println("\nReceipt for approved adoption:");
+                System.out.println(receipt.format());
+            }
+
+            // Cleanup
+            boolean deleted = adoptionRepo.deleteById(saved.getId());
+            System.out.println("Deleted demo adoption: " + deleted);
+            System.out.println("Total adoptions after cleanup: " + adoptionRepo.count());
 
         } catch (ShelterException e) {
             System.err.println("Repository error: " + e.getMessage());

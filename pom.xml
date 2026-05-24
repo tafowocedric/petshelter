@@ -14,8 +14,9 @@
 
     <modules>
         <module>db</module>
-        <module>app</module>
         <module>core</module>
+        <module>repository</module>
+        <module>app</module>
     </modules>
 
     <properties>
@@ -35,6 +36,16 @@
             <dependency>
                 <groupId>com.petshelter</groupId>
                 <artifactId>db</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.petshelter</groupId>
+                <artifactId>core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.petshelter</groupId>
+                <artifactId>repository</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

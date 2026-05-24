@@ -2,10 +2,13 @@ package com.petshelter;
 
 import com.petshelter.db.Database;
 import com.petshelter.db.DatabaseException;
+import com.petshelter.enums.AnimalStatus;
 import com.petshelter.enums.Gender;
+import com.petshelter.enums.Species;
 import com.petshelter.enums.UserRole;
 import com.petshelter.exception.*;
 import com.petshelter.model.*;
+import com.petshelter.repository.AnimalRepository;
 import com.petshelter.repository.UserRepository;
 
 import java.math.BigDecimal;
@@ -28,6 +31,7 @@ public class Main {
             demoDomainModel();
             demoExceptions();
             demoUserRepository();
+            demoAnimalRepository();
 
             System.out.println("=================================================");
             System.out.println(" Application started successfully! ✓");
@@ -168,6 +172,61 @@ public class Main {
             } catch (DuplicateUserException e) {
                 System.out.println("Caught expected: " + e.getMessage());
             }
+
+        } catch (ShelterException e) {
+            System.err.println("Repository error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private static void demoAnimalRepository() {
+        System.out.println("\n--- AnimalRepository Demo ---");
+
+        AnimalRepository animalRepo = new AnimalRepository();
+
+        try {
+            // count
+            System.out.println("Total animals: " + animalRepo.count());
+            System.out.println("Available:     " + animalRepo.countByStatus(AnimalStatus.AVAILABLE));
+
+            // findAll — polymorphic mapping
+            System.out.println("\nAll animals (polymorphic mapping):");
+            for (Animal a : animalRepo.findAll()) {
+                System.out.println("  " + a.getInfo()
+                        + "  [class=" + a.getClass().getSimpleName() + "]"
+                        + "  sound=" + a.makeSound());
+            }
+
+            // Explicit finder methods
+            System.out.println("\nFinder demos:");
+
+            Optional<Animal> byId   = animalRepo.findById(1);
+            Optional<Animal> byName = animalRepo.findByName("Whiskers");
+            List<Animal> dogs       = animalRepo.findBySpecies(Species.DOG);
+            List<Animal> available  = animalRepo.findByStatus(AnimalStatus.AVAILABLE);
+            List<Animal> availDogs  = animalRepo.findBySpeciesAndStatus(Species.DOG, AnimalStatus.AVAILABLE);
+
+            System.out.println("  findById(1):                       " + byId.map(Animal::getName).orElse("(none)"));
+            System.out.println("  findByName(\"Whiskers\"):            " + byName.map(Animal::getName).orElse("(none)"));
+            System.out.println("  findBySpecies(DOG):                " + dogs.size() + " dog(s)");
+            System.out.println("  findByStatus(AVAILABLE):           " + available.size() + " animal(s)");
+            System.out.println("  findBySpeciesAndStatus(DOG, AVAIL): " + availDogs.size() + " available dog(s)");
+
+            // CRUD round-trip
+            Cat newCat = new Cat("TestKitty", "Tabby", 1, Gender.FEMALE,
+                    new BigDecimal("3.50"), "Black", "A temporary test cat", true);
+            Animal saved = animalRepo.save(newCat);
+            System.out.println("\nSaved new cat with id=" + saved.getId());
+
+            saved.setDescription("Updated description");
+            animalRepo.update(saved);
+
+            Optional<Animal> reloaded = animalRepo.findById(saved.getId());
+            System.out.println("Reloaded: " + reloaded.map(Animal::getDescription).orElse("(missing)"));
+
+            boolean deleted = animalRepo.deleteById(saved.getId());
+            System.out.println("Deleted: " + deleted);
+            System.out.println("Total after cleanup: " + animalRepo.count());
 
         } catch (ShelterException e) {
             System.err.println("Repository error: " + e.getMessage());

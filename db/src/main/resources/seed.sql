@@ -1,6 +1,6 @@
 INSERT INTO users (username, password, full_name, email, phone, role) VALUES
-('admin',    '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', 'System Administrator', 'admin@shelter.com', '+1234567890', 'ADMIN'),
-('john_doe', '7f1524871be2754bf615a18f47ad13d44f60fb01b0bf1a8d4d2c6d1d8eb1c7e3', 'John Doe',             'john@example.com',  '+1234567891', 'CLIENT')
+('admin',    '$2a$12$3euPcmQFCiblsZeEu5s7p.9MQICjYJ7DjRHGqlObPMtAOTd0sCqDC', 'System Administrator', 'admin@shelter.com', '+1234567890', 'ADMIN'),
+('john_doe', '$2a$12$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'John Doe',             'john@example.com',  '+1234567891', 'CLIENT')
 ON CONFLICT (username) DO NOTHING;
 
 INSERT INTO animals (name, species, breed, age, gender, weight, color, description, is_trained, is_indoor, can_fly) VALUES

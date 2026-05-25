@@ -9,6 +9,7 @@ import com.petshelter.repository.AdoptionRepository;
 import com.petshelter.repository.AnimalRepository;
 import com.petshelter.repository.JoinedAdoption;
 import com.petshelter.repository.UserRepository;
+import com.petshelter.util.PasswordHasher;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -32,6 +33,7 @@ public class Main {
             demoUserRepository();
             demoAnimalRepository();
             demoAdoptionRepository();
+            demoPasswordHasher();
 
             System.out.println("=================================================");
             System.out.println(" Application started successfully! ✓");
@@ -66,8 +68,8 @@ public class Main {
         }
 
         // Users
-        User admin = new Admin("admin", "hash", "System Administrator", "admin@shelter.com", "+1234567890");
-        User client = new Client("john_doe", "hash", "John Doe", "john@example.com", "+1234567891");
+        User admin = new Admin("admin", PasswordHasher.hash("hash"), "System Administrator", "admin@shelter.com", "+1234567890");
+        User client = new Client("john_doe", PasswordHasher.hash("hash"), "John Doe", "john@example.com", "+1234567891");
 
         // [METHOD OVERLOADING]
         System.out.println("\nDisplay name plain:    " + admin.getDisplayName());
@@ -309,6 +311,28 @@ public class Main {
             System.err.println("Repository error: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    private static void demoPasswordHasher() {
+        System.out.println("\n--- PasswordHasher Demo (BCrypt) ---");
+
+        // Hash the same password twice — each hash is different (random salt)
+        String h1 = PasswordHasher.hash("admin123");
+        String h2 = PasswordHasher.hash("admin123");
+        System.out.println("hash #1: " + h1);
+        System.out.println("hash #2: " + h2);
+        System.out.println("different hashes (salt works): " + !h1.equals(h2));
+
+        // Both still verify against the original password
+        System.out.println("verify(\"admin123\", h1) = " + PasswordHasher.verify("admin123", h1));
+        System.out.println("verify(\"admin123\", h2) = " + PasswordHasher.verify("admin123", h2));
+        System.out.println("verify(\"wrong\",    h1) = " + PasswordHasher.verify("wrong",    h1));
+
+        // Sanity-check that the seed hashes verify against the known plain-text
+        String seedAdmin = "$2a$12$3euPcmQFCiblsZeEu5s7p.9MQICjYJ7DjRHGqlObPMtAOTd0sCqDC";
+        String seedJohn  = "$2a$12$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy";
+        System.out.println("seed admin verifies: " + PasswordHasher.verify("admin123", seedAdmin));
+        System.out.println("seed john  verifies: " + PasswordHasher.verify("pass123",  seedJohn));
     }
 
     private static void printRecordCounts() throws SQLException {

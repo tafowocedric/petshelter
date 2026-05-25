@@ -16,6 +16,7 @@
         <module>db</module>
         <module>core</module>
         <module>repository</module>
+        <module>service</module>
         <module>app</module>
     </modules>
 
@@ -24,6 +25,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <postgresql.version>42.7.3</postgresql.version>
+        <bcrypt.version>0.10.2</bcrypt.version>
     </properties>
 
     <dependencyManagement>
@@ -33,6 +35,12 @@
                 <artifactId>postgresql</artifactId>
                 <version>${postgresql.version}</version>
             </dependency>
+            <dependency>
+                <groupId>at.favre.lib</groupId>
+                <artifactId>bcrypt</artifactId>
+                <version>${bcrypt.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.petshelter</groupId>
                 <artifactId>db</artifactId>
@@ -46,6 +54,11 @@
             <dependency>
                 <groupId>com.petshelter</groupId>
                 <artifactId>repository</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.petshelter</groupId>
+                <artifactId>service</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

@@ -25,6 +25,10 @@
             <groupId>com.petshelter</groupId>
             <artifactId>repository</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.petshelter</groupId>
+            <artifactId>service</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

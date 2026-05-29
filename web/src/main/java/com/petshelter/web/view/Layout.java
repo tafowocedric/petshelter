@@ -44,7 +44,12 @@ public final class Layout {
         } else {
             boolean isAdmin = currentUser instanceof Admin;
             if (isAdmin) {
-                navEl.with(a("/admin", "Dashboard").cls("header-nav-item"));
+                navEl.with(
+                    a("/admin", "Dashboard").cls("header-nav-item"),
+                    a("/admin/animals", "Animals").cls("header-nav-item"),
+                    a("/admin/users", "Users").cls("header-nav-item"),
+                    a("/admin/adoptions", "Adoptions").cls("header-nav-item")
+                );
             } else {
                 navEl.with(
                     a("/browse", "Browse").cls("header-nav-item"),

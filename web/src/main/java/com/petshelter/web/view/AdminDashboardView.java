@@ -8,11 +8,15 @@ public final class AdminDashboardView {
 
     private AdminDashboardView() {}
 
-    public static String render(User currentUser) {
+    public static String render(User currentUser, long totalAnimals, long available, long adopted, long pendingAdoptions) {
         return Layout.page("Admin dashboard", currentUser,
-            Layout.card(
-                h1("Admin dashboard"),
-                p("Welcome, " + currentUser.getDisplayName() + ". Full admin features come next phase.")
+            h1("Admin dashboard"),
+            p("Welcome, " + currentUser.getDisplayName() + "."),
+            tag("ul").with(
+                tag("li").text("Total animals: " + totalAnimals),
+                tag("li").text("Available: " + available),
+                tag("li").text("Adopted: " + adopted),
+                tag("li").text("Pending adoptions: " + pendingAdoptions)
             )
         );
     }

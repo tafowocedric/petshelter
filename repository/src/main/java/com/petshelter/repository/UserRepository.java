@@ -14,12 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * JDBC repository for User entities.
- * [INTERFACES] [METHOD OVERLOADING] [POLYMORPHISM] [EXCEPTIONS]
- */
+// JDBC repository for User entities.
 public class UserRepository implements Repository<User, Integer> {
-    // SQL constants
     private static final String SQL_INSERT =
             "INSERT INTO users (username, password, full_name, email, phone, role) " +
                     "VALUES (?, ?, ?, ?, ?, ?) RETURNING id, created_at";
@@ -119,7 +115,6 @@ public class UserRepository implements Repository<User, Integer> {
         }
     }
 
-    // READ — [METHOD OVERLOADING]
     @Override
     public Optional<User> findById(Integer id) throws ShelterException {
         return findBy(SQL_FIND_BY_ID, ps -> ps.setInt(1, id));
@@ -219,10 +214,6 @@ public class UserRepository implements Repository<User, Integer> {
         return result;
     }
 
-    /**
-     * Maps a row of the users table to the correct User subclass.
-     * [POLYMORPHISM] — returns the concrete subtype based on the role column.
-     */
     private User mapRow(ResultSet rs) throws SQLException {
         String role = rs.getString("role");
 

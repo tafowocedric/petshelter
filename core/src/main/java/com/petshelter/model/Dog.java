@@ -16,13 +16,11 @@ public class Dog extends Animal {
     public boolean isTrained() { return isTrained; }
     public void setTrained(boolean trained) { this.isTrained = trained; }
 
-    // [POLYMORPHISM]
     @Override
     public String makeSound() {
         return "Woof! Woof!";
     }
 
-    // [POLYMORPHISM]
     @Override
     public String getCareInstructions() {
         StringBuilder sb = new StringBuilder("Walk twice daily. Feed dog food 2x. ");

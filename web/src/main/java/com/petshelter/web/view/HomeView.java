@@ -9,14 +9,14 @@ public final class HomeView {
     private HomeView() {}
 
     public static String render(User currentUser) {
-        return Layout.page("Pet Shelter", currentUser,
+        return Layout.page("Приют для животных", currentUser,
             section().cls("hero").with(
-                h1("Welcome to the Pet Shelter Management System!"),
-                p("A simple application for managing shelter animals and adoptions.").cls("lead"),
+                h1("Добро пожаловать в систему управления приютом!"),
+                p("Приложение для управления животными и усыновлениями.").cls("lead"),
                 currentUser == null
                     ? div().cls("actions").with(
-                    a("/login", "Sign in").cls("btn primary"),
-                    a("/register", "Create an account").cls("btn ghost")
+                    a("/login", "Войти").cls("btn primary"),
+                    a("/register", "Создать аккаунт").cls("btn ghost")
                 ) : empty()
             )
         );

@@ -108,13 +108,13 @@ public class WebServer {
         server.createContext("/", router);
         server.setExecutor(null);
         server.start();
-        System.out.println("[Web] Server listening on http://localhost:" + port);
+        System.out.println("[Веб] Сервер запущен на http://localhost:" + port);
     }
 
     public void stop() {
         if (server != null) {
             server.stop(0);
-            System.out.println("[Web] Server stopped");
+            System.out.println("[Веб] Сервер остановлен.");
         }
     }
 }

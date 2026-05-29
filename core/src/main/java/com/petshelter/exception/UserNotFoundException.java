@@ -3,11 +3,11 @@ package com.petshelter.exception;
 
 public class UserNotFoundException extends ShelterException {
     public UserNotFoundException(int id) {
-        super("User not found with id: " + id);
+        super("Пользователь не найден: id=" + id);
     }
 
     public UserNotFoundException(String username) {
-        super("User not found with username: " + username);
+        super("Пользователь не найден: имя=" + username);
     }
 
     public UserNotFoundException(String message, Throwable cause) {

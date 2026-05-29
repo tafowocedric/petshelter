@@ -6,10 +6,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-/**
- * Adoption record — links a Client to an Animal.
- * [ENCAPSULATION] [NESTED CLASSES] [DATA TYPES]
- */
+// Links a Client to an Animal.
 public class Adoption {
     private Integer id;
     private Integer animalId;
@@ -26,7 +23,6 @@ public class Adoption {
         this.status = AdoptionStatus.PENDING;
     }
 
-    // Getters & setters
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
 
@@ -48,7 +44,6 @@ public class Adoption {
     public Integer getApprovedBy() { return approvedBy; }
     public void setApprovedBy(Integer approvedBy) { this.approvedBy = approvedBy; }
 
-    /** Factory method for producing a receipt from this adoption. */
     public Receipt buildReceipt(Animal animal, User client) {
         return new Receipt(this, animal, client);
     }

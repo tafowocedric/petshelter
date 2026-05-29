@@ -64,10 +64,11 @@ public class AdoptionController {
         try {
             switch (action) {
                 case "approve":  adoptions.approve(current, id); break;
-                case "reject":   adoptions.reject(current, id, "Rejected by admin"); break;
+                case "reject":   adoptions.reject(current, id, "Отклонено администратором"); break;
                 case "complete": adoptions.complete(current, id); break;
             }
-            return new Response(req.exchange()).redirect("/admin/adoptions?notice=Adoption+" + action + "d");
+            String noticeRu = action.equals("approve") ? "Заявка одобрена" : action.equals("reject") ? "Заявка отклонена" : "Заявка завершена";
+            return new Response(req.exchange()).redirect("/admin/adoptions?notice=" + URLEncoder.encode(noticeRu, StandardCharsets.UTF_8));
         } catch (ShelterException e) {
             String msg = URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
             return new Response(req.exchange()).redirect("/admin/adoptions?error=" + msg);

@@ -68,7 +68,7 @@ public class ClientController {
 
         try {
             adoptions.request(current, animalId, notes);
-            return new Response(req.exchange()).redirect("/my-adoptions?notice=Adoption+requested");
+            return new Response(req.exchange()).redirect("/my-adoptions?notice=" + URLEncoder.encode("Заявка подана", StandardCharsets.UTF_8));
         } catch (ShelterException e) {
             String msg = URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
             return new Response(req.exchange()).redirect("/animals/" + animalId + "?error=" + msg);
@@ -87,7 +87,7 @@ public class ClientController {
         int id = Integer.parseInt(req.param("id"));
         try {
             adoptions.cancel(current, id);
-            return new Response(req.exchange()).redirect("/my-adoptions?notice=Adoption+cancelled");
+            return new Response(req.exchange()).redirect("/my-adoptions?notice=" + URLEncoder.encode("Заявка отменена", StandardCharsets.UTF_8));
         } catch (ShelterException e) {
             String msg = URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
             return new Response(req.exchange()).redirect("/my-adoptions?error=" + msg);

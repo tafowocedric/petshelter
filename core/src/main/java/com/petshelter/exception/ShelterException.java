@@ -1,10 +1,6 @@
 package com.petshelter.exception;
 
-/**
- * Base exception for all application-specific errors.
- * [EXCEPTIONS] [INHERITANCE] — extended by more specific exceptions
- * This forces explicit error handling at service boundaries.
- */
+// Base exception for all application-specific errors.
 public class ShelterException extends Exception {
     public ShelterException(String message) {
         super(message);

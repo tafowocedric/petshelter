@@ -18,28 +18,28 @@ public final class AnimalFormView {
         boolean editing = existing != null && existing.getId() != null;
         String action = editing ? "/admin/animals/" + existing.getId() + "/edit" : "/admin/animals/new";
 
-        return Layout.page(editing ? "Edit animal" : "Add animal", currentUser, null, error,
-            h1(editing ? "Edit animal" : "Add animal"),
+        return Layout.page(editing ? "Редактировать животное" : "Добавить животное", currentUser, null, error,
+            h1(editing ? "Редактировать животное" : "Добавить животное"),
             form().method("post").action(action).with(
-                Layout.field("Name", "name", "text", val(existing, Animal::getName), true),
+                Layout.field("Имя", "name", "text", val(existing, Animal::getName), true),
                 speciesSelect(existing),
-                Layout.field("Breed", "breed", "text", val(existing, Animal::getBreed), false),
-                Layout.field("Age", "age", "number", existing != null ? String.valueOf(existing.getAge()) : "", true),
+                Layout.field("Порода", "breed", "text", val(existing, Animal::getBreed), false),
+                Layout.field("Возраст", "age", "number", existing != null ? String.valueOf(existing.getAge()) : "", true),
                 genderSelect(existing),
-                Layout.field("Weight (kg)", "weight", "number",
+                Layout.field("Вес (кг)", "weight", "number",
                     existing != null && existing.getWeight() != null ? existing.getWeight().toString() : "",
                     false).with(raw("")),
-                Layout.field("Color", "color", "text", val(existing, Animal::getColor), false),
-                Layout.field("Description", "description", "text", val(existing, Animal::getDescription), false),
-                Layout.field("Trained (dogs only [true/false])", "isTrained", "text",
+                Layout.field("Цвет", "color", "text", val(existing, Animal::getColor), false),
+                Layout.field("Описание", "description", "text", val(existing, Animal::getDescription), false),
+                Layout.field("Дрессирован (только собаки [true/false])", "isTrained", "text",
                     existing instanceof Dog ? String.valueOf(((Dog) existing).isTrained()) : "", false),
-                Layout.field("Indoor (cats only [true/false])", "isIndoor", "text",
+                Layout.field("Домашний (только кошки [true/false])", "isIndoor", "text",
                     existing instanceof Cat ? String.valueOf(((Cat) existing).isIndoor()) : "", false),
-                Layout.field("Can fly (birds only [true/false])", "canFly", "text",
+                Layout.field("Умеет летать (только птицы [true/false])", "canFly", "text",
                     existing instanceof Bird ? String.valueOf(((Bird) existing).canFly()) : "", false),
-                button(editing ? "Save changes" : "Create animal")
+                button(editing ? "Сохранить" : "Создать животное")
             ),
-            p("").with(a("/admin/animals", "Back to animals"))
+            p("").with(a("/admin/animals", "Назад к животным"))
         );
     }
 
@@ -50,7 +50,7 @@ public final class AnimalFormView {
             if (a != null && a.getSpecies() == sp) opt.attr("selected", "selected");
             s.with(opt);
         }
-        return label("Species").with(s);
+        return label("Вид").with(s);
     }
 
     private static Element genderSelect(Animal a) {
@@ -61,7 +61,7 @@ public final class AnimalFormView {
             if (a != null && a.getGender() == g) opt.attr("selected", "selected");
             s.with(opt);
         }
-        return label("Gender").with(s);
+        return label("Пол").with(s);
     }
 
     private static String val(Animal a, java.util.function.Function<Animal, String> getter) {

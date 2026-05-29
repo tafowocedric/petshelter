@@ -19,10 +19,7 @@ import com.petshelter.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Adoption workflow orchestration.
- * [POLYMORPHISM] [METHOD OVERLOADING] [RECURSION] [EXCEPTIONS]
- */
+// Adoption workflow orchestration.
 public class AdoptionService {
     private final AdoptionRepository adoptionRepo;
     private final AnimalRepository animalRepo;
@@ -74,7 +71,7 @@ public class AdoptionService {
         Adoption adoption = requireExisting(adoptionId);
 
         if (adoption.getStatus() != AdoptionStatus.PENDING) {
-            throw new ShelterException("Only PENDING adoptions can be approved (current: " + adoption.getStatus() + ")");
+            throw new ShelterException("Одобрить можно только заявки в статусе PENDING (текущий: " + adoption.getStatus() + ")");
         }
 
         adoption.setStatus(AdoptionStatus.APPROVED);
@@ -91,7 +88,7 @@ public class AdoptionService {
         Adoption adoption = requireExisting(adoptionId);
 
         if (adoption.getStatus() != AdoptionStatus.PENDING) {
-            throw new ShelterException("Only PENDING adoptions can be rejected (current: " + adoption.getStatus() + ")");
+            throw new ShelterException("Отклонить можно только заявки в статусе PENDING (текущий: " + adoption.getStatus() + ")");
         }
 
         adoption.setStatus(AdoptionStatus.REJECTED);
@@ -108,7 +105,7 @@ public class AdoptionService {
         authService.requireAdmin(actor, "complete adoption");
         Adoption adoption = requireExisting(adoptionId);
         if (adoption.getStatus() != AdoptionStatus.APPROVED) {
-            throw new ShelterException("Only APPROVED adoptions can be completed (current: " + adoption.getStatus() + ")");
+            throw new ShelterException("Завершить можно только заявки в статусе APPROVED (текущий: " + adoption.getStatus() + ")");
         }
 
         adoption.setStatus(AdoptionStatus.COMPLETED);
@@ -174,46 +171,25 @@ public class AdoptionService {
         return adoptionRepo.findByStatus(status).size();
     }
 
-    // [RECURSION] — recursive walks over adoption history;
-    // Recursively count adoptions for a client across all four statuses.
-    public long countAdoptionsRecursive(int clientId) throws ShelterException {
-        AdoptionStatus[] all = AdoptionStatus.values();
-        return countByStatusRecursive(clientId, all, 0);
-    }
-
-    private long countByStatusRecursive(int clientId, AdoptionStatus[] statuses, int idx) throws ShelterException {
-        if (idx == statuses.length) {
-            return 0L;   // base case
-        }
-
-        long here = adoptionRepo.findJoinedByClient(clientId).stream()
-            .filter(j -> j.getAdoption().getStatus() == statuses[idx]).count();
-
-        return here + countByStatusRecursive(clientId, statuses, idx + 1);  // recursive case
+    public long countAdoptions(int clientId) throws ShelterException {
+        return adoptionRepo.findJoinedByClient(clientId).size();
     }
 
     public String buildHistoryTrail(int clientId, int animalId) throws ShelterException {
-        List<JoinedAdoption> all = adoptionRepo.findJoinedByClient(clientId);
-        List<JoinedAdoption> filtered = all.stream().filter(j -> j.getAdoption().getAnimalId().equals(animalId))
+        List<JoinedAdoption> filtered = adoptionRepo.findJoinedByClient(clientId).stream()
+            .filter(j -> j.getAdoption().getAnimalId().equals(animalId))
             .collect(java.util.stream.Collectors.toList());
 
         if (filtered.isEmpty()) {
             return "(no prior adoption requests)";
         }
         StringBuilder sb = new StringBuilder();
-        walkHistory(filtered, 0, sb);
-        return sb.toString();
-    }
-
-    private void walkHistory(List<JoinedAdoption> list, int idx, StringBuilder sb) {
-        if (idx >= list.size()) {
-            return;
+        for (int i = 0; i < filtered.size(); i++) {
+            JoinedAdoption ja = filtered.get(i);
+            sb.append("  Attempt #").append(i + 1).append(" on ").append(ja.getAdoption().getAdoptionDate())
+                .append(" — ").append(ja.getAdoption().getStatus()).append("\n");
         }
-        JoinedAdoption ja = list.get(idx);
-        sb.append("  Attempt #").append(idx + 1).append(" on ").append(ja.getAdoption().getAdoptionDate())
-            .append(" — ").append(ja.getAdoption().getStatus()).append("\n");
-
-        walkHistory(list, idx + 1, sb);
+        return sb.toString();
     }
 
     // PRIVATE HELPERS

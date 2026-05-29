@@ -8,10 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
-/**
- * Abstract base class for all animals in the shelter.
- *   [ENCAPSULATION] [INHERITANCE] [POLYMORPHISM] [DATA TYPES]
- */
+// Base class for all shelter animals.
 public abstract class Animal {
     private Integer id;
     private String name;
@@ -28,7 +25,7 @@ public abstract class Animal {
     protected Animal(String name, Species species, String breed, int age, Gender gender, BigDecimal weight, String color, String description) {
         setName(name);
 
-        this.species = Objects.requireNonNull(species, "Species cannot be null");
+        this.species = Objects.requireNonNull(species, "Вид не может быть null");
         this.breed = breed;
 
         setAge(age);
@@ -41,18 +38,16 @@ public abstract class Animal {
     }
 
 
-    // [POLYMORPHISM]
     public abstract String makeSound();
     public abstract String getCareInstructions();
 
-    // [ENCAPSULATION]
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
 
     public String getName() { return name; }
     public void setName(String name) {
         if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Animal name cannot be empty");
+            throw new IllegalArgumentException("Имя животного не может быть пустым");
         }
         this.name = name.trim();
     }
@@ -65,7 +60,7 @@ public abstract class Animal {
     public int getAge() { return age; }
     public void setAge(int age) {
         if (age < 0) {
-            throw new IllegalArgumentException("Age cannot be negative");
+            throw new IllegalArgumentException("Возраст не может быть отрицательным");
         }
         this.age = age;
     }
@@ -89,7 +84,7 @@ public abstract class Animal {
 
     public AnimalStatus getStatus() { return status; }
     public void setStatus(AnimalStatus status) {
-        this.status = Objects.requireNonNull(status, "Status cannot be null");
+        this.status = Objects.requireNonNull(status, "Статус не может быть null");
     }
 
     public LocalDate getArrivalDate() { return arrivalDate; }

@@ -1,8 +1,3 @@
-INSERT INTO users (username, password, full_name, email, phone, role) VALUES
-('admin',    '$2a$12$3euPcmQFCiblsZeEu5s7p.9MQICjYJ7DjRHGqlObPMtAOTd0sCqDC', 'System Administrator', 'admin@shelter.com', '+1234567890', 'ADMIN'),
-('john_doe', '$2a$12$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'John Doe',             'john@example.com',  '+1234567891', 'CLIENT')
-ON CONFLICT (username) DO NOTHING;
-
 INSERT INTO animals (name, species, breed, age, gender, weight, color, description, is_trained, is_indoor, can_fly) VALUES
 ('Rex',      'DOG',  'Labrador',         3, 'MALE',   25.50, 'Golden', 'Friendly and energetic',  true,  null, null),
 ('Buddy',    'DOG',  'Golden Retriever', 5, 'MALE',   30.00, 'Cream',  'Loves children and walks', true,  null, null),

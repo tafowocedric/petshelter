@@ -17,6 +17,7 @@ import com.petshelter.web.view.AnimalFormView;
 import com.petshelter.web.view.AnimalListView;
 
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 
 public class AnimalController {
     private final AnimalService animals;
@@ -46,7 +47,7 @@ public class AnimalController {
         try {
             Animal animal = buildAnimalFromForm(req, null);
             animals.create(current, animal);
-            return new Response(req.exchange()).redirect("/admin/animals?notice=Animal+created");
+            return new Response(req.exchange()).redirect("/admin/animals?notice=" + URLEncoder.encode("Животное создано", java.nio.charset.StandardCharsets.UTF_8));
         } catch (Exception e) {
             return new Response(req.exchange()).status(400).html(
                 AnimalFormView.render(current, null, e.getMessage())
@@ -74,7 +75,7 @@ public class AnimalController {
             updated.setStatus(existing.getStatus());
             updated.setArrivalDate(existing.getArrivalDate());
             animals.update(current, updated);
-            return new Response(req.exchange()).redirect("/admin/animals?notice=Animal+updated");
+            return new Response(req.exchange()).redirect("/admin/animals?notice=" + URLEncoder.encode("Животное обновлено", java.nio.charset.StandardCharsets.UTF_8));
         } catch (Exception e) {
             Animal existing = animals.getById(id);
             return new Response(req.exchange()).status(400).html(
@@ -87,7 +88,7 @@ public class AnimalController {
         User current = CurrentUser.from(req, sessions).orElseThrow();
         int id = Integer.parseInt(req.param("id"));
         animals.delete(current, id);
-        return new Response(req.exchange()).redirect("/admin/animals?notice=Animal+deleted");
+        return new Response(req.exchange()).redirect("/admin/animals?notice=" + URLEncoder.encode("Животное удалено", java.nio.charset.StandardCharsets.UTF_8));
     }
 
     private Animal buildAnimalFromForm(Request req, Animal existing) {

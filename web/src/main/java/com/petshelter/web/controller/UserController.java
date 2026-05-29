@@ -30,7 +30,7 @@ public class UserController {
         int id = Integer.parseInt(req.param("id"));
         try {
             users.delete(current, id);
-            return new Response(req.exchange()).redirect("/admin/users?notice=User+deleted");
+            return new Response(req.exchange()).redirect("/admin/users?notice=" + java.net.URLEncoder.encode("Пользователь удалён", java.nio.charset.StandardCharsets.UTF_8));
         } catch (ShelterException e) {
             return new Response(req.exchange())
                 .redirect("/admin/users?error=" + java.net.URLEncoder.encode(

@@ -38,34 +38,34 @@ public final class Layout {
         Element navEl = nav().cls("nav");
         if (currentUser == null) {
             navEl.with(
-                a("/login", "Sign in").cls("header-nav-item"),
-                a("/register", "Register").cls("header-nav-item")
+                a("/login", "Войти").cls("header-nav-item"),
+                a("/register", "Регистрация").cls("header-nav-item")
             );
         } else {
             boolean isAdmin = currentUser instanceof Admin;
             if (isAdmin) {
                 navEl.with(
-                    a("/admin", "Dashboard").cls("header-nav-item"),
-                    a("/admin/animals", "Animals").cls("header-nav-item"),
-                    a("/admin/users", "Users").cls("header-nav-item"),
-                    a("/admin/adoptions", "Adoptions").cls("header-nav-item")
+                    a("/admin", "Панель управления").cls("header-nav-item"),
+                    a("/admin/animals", "Животные").cls("header-nav-item"),
+                    a("/admin/users", "Пользователи").cls("header-nav-item"),
+                    a("/admin/adoptions", "Усыновления").cls("header-nav-item")
                 );
             } else {
                 navEl.with(
-                    a("/browse", "Browse").cls("header-nav-item"),
-                    a("/my-adoptions", "My adoptions").cls("header-nav-item")
+                    a("/browse", "Каталог").cls("header-nav-item"),
+                    a("/my-adoptions", "Мои усыновления").cls("header-nav-item")
                 );
             }
             navEl.with(
                 span().cls("user").text(currentUser.getDisplayName()),
                 form().method("post").action("/logout").cls("inline").with(
-                    button("Sign out").cls("btn ghost small")
+                    button("Выйти").cls("btn ghost small")
                 )
             );
         }
 
         return tag("header").cls("topbar").with(
-            a("/", "🐾 Pet Shelter").cls("brand"),
+            a("/", "🐾 Приют").cls("brand"),
             navEl
         );
     }

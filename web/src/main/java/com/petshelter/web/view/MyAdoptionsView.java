@@ -14,11 +14,11 @@ public final class MyAdoptionsView {
 
     public static String render(User currentUser, List<JoinedAdoption> adoptions,
                                 String notice, String error) {
-        return Layout.page("My adoptions", currentUser, notice, error,
-            h1("My adoptions"),
+        return Layout.page("Мои усыновления", currentUser, notice, error,
+            h1("Мои усыновления"),
             adoptions.isEmpty()
-                ? p("You haven't requested any adoptions yet. ").cls("muted").with(
-                a("/browse", "Browse animals")
+                ? p("Вы ещё не подавали заявку на усыновление. ").cls("muted").with(
+                a("/browse", "Каталог животных")
             ) : adoptionsTable(adoptions)
         );
     }
@@ -41,8 +41,8 @@ public final class MyAdoptionsView {
         return table().with(
             thead().with(
                 tr().with(
-                    th("ID"), th("Date"), th("Animal"),
-                    th("Status"), th("Notes"), th("Actions")
+                    th("ID"), th("Дата"), th("Животное"),
+                    th("Статус"), th("Примечания"), th("Действия")
                 )
             ),
             tbody
@@ -51,7 +51,7 @@ public final class MyAdoptionsView {
 
     private static Node actionsFor(Integer id, AdoptionStatus status) {
         if (status == AdoptionStatus.PENDING || status == AdoptionStatus.APPROVED) {
-            return form().method("post").action("/my-adoptions/" + id + "/cancel").with(button("Cancel"));
+            return form().method("post").action("/my-adoptions/" + id + "/cancel").with(button("Отменить"));
         }
         return span().cls("muted").text("—");
     }

@@ -3,7 +3,7 @@ package com.petshelter.exception;
 
 public class AdoptionNotFoundException extends ShelterException {
     public AdoptionNotFoundException(int id) {
-        super("Adoption not found with id: " + id);
+        super("Заявка на усыновление не найдена: id=" + id);
     }
 
     public AdoptionNotFoundException(String message, Throwable cause) {

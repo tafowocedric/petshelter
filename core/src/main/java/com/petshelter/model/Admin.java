@@ -12,8 +12,4 @@ public class Admin extends User {
         return UserRole.ADMIN;
     }
 
-    /** Admins can approve adoptions; clients cannot. */
-    public boolean canApproveAdoptions() {
-        return true;
-    }
 }

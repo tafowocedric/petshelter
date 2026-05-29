@@ -17,12 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * JDBC repository for Animal entities.
- * [INTERFACES] [METHOD OVERLOADING] [POLYMORPHISM] [DATA TYPES]
- */
+// JDBC repository for Animal entities.
 public class AnimalRepository implements Repository<Animal, Integer> {
-    // Columns selected by all read queries (kept consistent)
     private static final String COLS =
         "id, name, species, breed, age, gender, weight, color, description, " +
             "status, arrival_date, is_trained, is_indoor, can_fly";
@@ -94,7 +90,6 @@ public class AnimalRepository implements Repository<Animal, Integer> {
         }
     }
 
-    // READ — [METHOD OVERLOADING]
     @Override
     public Optional<Animal> findById(Integer id) throws ShelterException {
         return findBy(SQL_FIND_BY_ID, ps -> ps.setInt(1, id));

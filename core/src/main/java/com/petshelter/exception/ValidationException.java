@@ -7,6 +7,6 @@ public class ValidationException extends ShelterException {
     }
 
     public ValidationException(String field, String reason) {
-        super("Validation failed on '" + field + "': " + reason);
+        super("Ошибка валидации поля '" + field + "': " + reason);
     }
 }

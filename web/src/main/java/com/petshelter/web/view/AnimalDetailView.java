@@ -18,27 +18,27 @@ public final class AnimalDetailView {
         return Layout.page(animal.getName(), currentUser, notice, error,
             h1(animal.getName()),
             tag("ul").with(
-                tag("li").text("Species: " + animal.getSpecies()),
-                tag("li").text("Breed: " + (animal.getBreed() == null ? "—" : animal.getBreed())),
-                tag("li").text("Age: " + animal.getAge() + " years"),
-                tag("li").text("Gender: " + (animal.getGender() == null ? "—" : animal.getGender())),
-                tag("li").text("Weight: " + (animal.getWeight() == null ? "—" : animal.getWeight() + " kg")),
-                tag("li").text("Color: " + (animal.getColor() == null ? "—" : animal.getColor())),
-                tag("li").text("Status: " + animal.getStatus()),
+                tag("li").text("Вид: " + animal.getSpecies()),
+                tag("li").text("Порода: " + (animal.getBreed() == null ? "—" : animal.getBreed())),
+                tag("li").text("Возраст: " + animal.getAge() + " лет"),
+                tag("li").text("Пол: " + (animal.getGender() == null ? "—" : animal.getGender())),
+                tag("li").text("Вес: " + (animal.getWeight() == null ? "—" : animal.getWeight() + " кг")),
+                tag("li").text("Цвет: " + (animal.getColor() == null ? "—" : animal.getColor())),
+                tag("li").text("Статус: " + animal.getStatus()),
                 tag("li").text(speciesSpecific(animal))
             ),
             animal.getDescription() != null && !animal.getDescription().isBlank() ? p(animal.getDescription()) : empty(),
-            p("").with(strong("Sound: ")).with(text(animal.makeSound())),
-            p("").with(strong("Care: ")).with(text(animal.getCareInstructions())),
+            p("").with(strong("Звук: ")).with(text(animal.makeSound())),
+            p("").with(strong("Уход: ")).with(text(animal.getCareInstructions())),
             adoptButton(currentUser, animal),
-            p("").with(a("/browse", "Back to browse"))
+            p("").with(a("/browse", "Назад к каталогу"))
         );
     }
 
     private static String speciesSpecific(Animal animal) {
-        if (animal instanceof Dog)  return "Trained: " + ((Dog) animal).isTrained();
-        if (animal instanceof Cat)  return "Indoor: " + ((Cat) animal).isIndoor();
-        if (animal instanceof Bird) return "Can fly: " + ((Bird) animal).canFly();
+        if (animal instanceof Dog)  return "Дрессирован: " + ((Dog) animal).isTrained();
+        if (animal instanceof Cat)  return "Домашний: " + ((Cat) animal).isIndoor();
+        if (animal instanceof Bird) return "Умеет летать: " + ((Bird) animal).canFly();
         return "";
     }
 
@@ -47,15 +47,15 @@ public final class AnimalDetailView {
             return empty();
         }
         if (animal.getStatus() != AnimalStatus.AVAILABLE) {
-            return p("This animal is not currently available for adoption.").cls("muted");
+            return p("Это животное сейчас недоступно для усыновления.").cls("muted");
         }
         return form().method("post").action("/animals/" + animal.getId() + "/adopt").with(
-            label("Notes (optional)").cls("form-label").with(
+            label("Примечания (необязательно)").cls("form-label").with(
                 textarea("notes").id("client-note").attr("rows", "5")
                     .attr("style", "width: 450px; height: 120px")
-                    .attr("placeholder", "Why you'd be a good fit...")
+                    .attr("placeholder", "Почему вы подходите...")
             ),
-            button("Request adoption")
+            button("Запросить усыновление")
         );
     }
 }

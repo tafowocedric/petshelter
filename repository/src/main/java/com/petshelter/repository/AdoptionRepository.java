@@ -16,14 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * JDBC repository for Adoption entities.
- * [INTERFACES] [POLYMORPHISM] [EXCEPTIONS]
- *
- * SQL joins fetch the related Animal and Client in a single query.
- */
+// JDBC repository for Adoption entities (SQL joins fetch Animal + Client in one query).
 public class AdoptionRepository implements Repository<Adoption, Integer> {
-    // Base SQL fragments (kept consistent across queries)
     private static final String ADOPTION_COLS =
         "a.id AS adoption_id, a.animal_id AS animal_id, a.client_id AS client_id, a.adoption_date AS adoption_date, " +
         "a.status AS adoption_status, a.notes AS notes, a.approved_by AS approved_by";

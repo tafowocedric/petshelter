@@ -2,10 +2,7 @@ package com.petshelter.util;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 
-/**
- * Utility class for password hashing using SHA-256.
- * [ENCAPSULATION] [DATA TYPES] [EXCEPTIONS]
- */
+// BCrypt password hashing utilities.
 public final class PasswordHasher {
     private static final int COST = 12;
 
@@ -13,9 +10,6 @@ public final class PasswordHasher {
         throw new AssertionError("PasswordHasher is a utility class — do not instantiate.");
     }
 
-    /**
-     * Hashes a plain-text password and returns a BCrypt hash string.
-     */
     public static String hash(String plain) {
         if (plain == null) {
             throw new IllegalArgumentException("Password cannot be null");
@@ -23,10 +17,6 @@ public final class PasswordHasher {
         return BCrypt.withDefaults().hashToString(COST, plain.toCharArray());
     }
 
-    /**
-     * Verifies a plain-text password against a stored BCrypt hash.
-     * @return true if the password matches the hash
-     */
     public static boolean verify(String plain, String hash) {
         if (plain == null || hash == null) {
             return false;

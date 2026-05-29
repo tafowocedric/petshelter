@@ -26,14 +26,14 @@ public final class UserListView {
             );
         }
 
-        return Layout.page("Users", currentUser, notice, error,
-            h1("Users"),
-            p("All registered users. You cannot delete your own account or other admins."),
+        return Layout.page("Пользователи", currentUser, notice, error,
+            h1("Пользователи"),
+            p("Все зарегистрированные пользователи. Нельзя удалить свой аккаунт или других администраторов."),
             table().with(
                 thead().with(
                     tr().with(
-                        th("ID"), th("Username"), th("Full name"),
-                        th("Email"), th("Phone"), th("Role"), th("Actions")
+                        th("ID"), th("Имя пользователя"), th("Полное имя"),
+                        th("Email"), th("Телефон"), th("Роль"), th("Действия")
                     )
                 ),
                 tbody
@@ -49,7 +49,7 @@ public final class UserListView {
             return span().cls("muted").text("—");
         }
 
-        return form().method("post").action("/admin/users/" + row.getId() + "/delete").with(button("Delete")
+        return form().method("post").action("/admin/users/" + row.getId() + "/delete").with(button("Удалить")
         );
     }
 }

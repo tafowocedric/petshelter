@@ -5,10 +5,7 @@ import com.petshelter.enums.UserRole;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-/**
- * Abstract base class for all users.
- * [ENCAPSULATION] [INHERITANCE] [METHOD OVERLOADING] [POLYMORPHISM]
- */
+// Base class for all users.
 public abstract class User {
     private Integer id;
     private String username;
@@ -20,7 +17,7 @@ public abstract class User {
 
     protected User(String username, String password, String fullName, String email, String phone) {
         setUsername(username);
-        this.password = Objects.requireNonNull(password, "Password cannot be null");
+        this.password = Objects.requireNonNull(password, "Пароль не может быть null");
 
         setFullName(fullName);
         setEmail(email);
@@ -30,7 +27,6 @@ public abstract class User {
 
     public abstract UserRole getRole();
 
-    // [METHOD OVERLOADING]
     public String getDisplayName() {
         return fullName;
     }
@@ -39,11 +35,6 @@ public abstract class User {
         return withUsername ? fullName + " (" + username + ")" : fullName;
     }
 
-    public String getDisplayName(String prefix) {
-        return prefix + " " + fullName;
-    }
-
-
     // Getters & setters
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
@@ -51,7 +42,7 @@ public abstract class User {
     public String getUsername() { return username; }
     public void setUsername(String username) {
         if (username == null || username.trim().length() < 3) {
-            throw new IllegalArgumentException("Username must be at least 3 characters");
+            throw new IllegalArgumentException("Имя пользователя должно содержать не менее 3 символов");
         }
         this.username = username.trim();
     }
@@ -62,7 +53,7 @@ public abstract class User {
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) {
         if (fullName == null || fullName.trim().isEmpty()) {
-            throw new IllegalArgumentException("Full name cannot be empty");
+            throw new IllegalArgumentException("Полное имя не может быть пустым");
         }
         this.fullName = fullName.trim();
     }
@@ -70,7 +61,7 @@ public abstract class User {
     public String getEmail() { return email; }
     public void setEmail(String email) {
         if (email == null || !email.contains("@")) {
-            throw new IllegalArgumentException("Invalid email");
+            throw new IllegalArgumentException("Неверный email");
         }
         this.email = email.trim().toLowerCase();
     }

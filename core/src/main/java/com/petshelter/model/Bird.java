@@ -16,13 +16,11 @@ public class Bird extends Animal {
     public boolean canFly() { return canFly; }
     public void setCanFly(boolean canFly) { this.canFly = canFly; }
 
-    // [POLYMORPHISM]
     @Override
     public String makeSound() {
         return "Tweet! Tweet!";
     }
 
-    // [POLYMORPHISM]
     @Override
     public String getCareInstructions() {
         return canFly ? "Provide a large cage and allow daily flight time." : "Provide ground space and gentle handling.";

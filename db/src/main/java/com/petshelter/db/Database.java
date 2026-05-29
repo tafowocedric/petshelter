@@ -21,7 +21,7 @@ public final class Database {
             connection = DatabaseConnection.getInstance();
             new DatabaseInitializer(connection).initialize();
             started = true;
-            System.out.println("[DB] Module started successfully.");
+            System.out.println("[БД] Модуль запущен успешно.");
         } catch (RuntimeException e) {
             throw new DatabaseException("Failed to start the database module", e);
         }
@@ -42,7 +42,7 @@ public final class Database {
         }
         connection = null;
         started = false;
-        System.out.println("[DB] Module shut down.");
+        System.out.println("[БД] Модуль остановлен.");
     }
 
     private static void ensureStarted() {

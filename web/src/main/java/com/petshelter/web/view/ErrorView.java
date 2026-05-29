@@ -9,28 +9,28 @@ public final class ErrorView {
     private ErrorView() {}
 
     public static String notFound(User currentUser, String path) {
-        return Layout.page("Not found", currentUser,
-            h1("404 — Not found"),
-            p("The page you requested doesn't exist:"),
+        return Layout.page("Не найдено", currentUser,
+            h1("404 — Страница не найдена"),
+            p("Запрошенная страница не существует:"),
             p(path).cls("muted"),
-            p("").with(a("/", "Go home"))
+            p("").with(a("/", "На главную"))
         );
     }
 
     public static String forbidden(User currentUser) {
-        return Layout.page("Forbidden", currentUser,
-            h1("403 — Forbidden"),
-            p("You don't have permission to view this page."),
-            p("").with(a("/", "Go home"))
+        return Layout.page("Доступ запрещён", currentUser,
+            h1("403 — Доступ запрещён"),
+            p("У вас нет прав для просмотра этой страницы."),
+            p("").with(a("/", "На главную"))
         );
     }
 
     public static String serverError(User currentUser, String message) {
-        return Layout.page("Server error", currentUser,
-            h1("500 — Server error"),
-            p("Something went wrong on our end."),
+        return Layout.page("Ошибка сервера", currentUser,
+            h1("500 — Ошибка сервера"),
+            p("Произошла ошибка на сервере."),
             p(message == null ? "" : message).cls("muted"),
-            p("").with(a("/", "Go home"))
+            p("").with(a("/", "На главную"))
         );
     }
 }

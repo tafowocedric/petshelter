@@ -12,10 +12,7 @@ import com.petshelter.repository.AnimalRepository;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Business logic for the Animal entity.
- * [POLYMORPHISM] [METHOD OVERLOADING] [EXCEPTIONS]
- */
+// Business logic for Animal management.
 public class AnimalService {
     private final AnimalRepository animalRepo;
     private final AuthService authService;
@@ -36,7 +33,7 @@ public class AnimalService {
     public Animal update(User actor, Animal animal) throws ShelterException {
         authService.requireAdmin(actor, "update animal");
         if (animal.getId() == null) {
-            throw new ValidationException("id", "Cannot update an animal without an id");
+            throw new ValidationException("id", "Нельзя обновить животное без id");
         }
         validate(animal);
         return animalRepo.update(animal);
@@ -106,19 +103,19 @@ public class AnimalService {
     // PRIVATE HELPERS
     private void validate(Animal animal) throws ValidationException {
         if (animal == null) {
-            throw new ValidationException("Animal cannot be null");
+            throw new ValidationException("Животное не может быть null");
         }
         if (animal.getName() == null || animal.getName().isBlank()) {
-            throw new ValidationException("name", "Required");
+            throw new ValidationException("имя", "Обязательное поле");
         }
         if (animal.getSpecies() == null) {
-            throw new ValidationException("species", "Required");
+            throw new ValidationException("вид", "Обязательное поле");
         }
         if (animal.getAge() < 0) {
-            throw new ValidationException("age", "Cannot be negative");
+            throw new ValidationException("возраст", "Не может быть отрицательным");
         }
         if (animal.getWeight() != null && animal.getWeight().signum() < 0) {
-            throw new ValidationException("weight", "Cannot be negative");
+            throw new ValidationException("вес", "Не может быть отрицательным");
         }
     }
 
@@ -129,7 +126,7 @@ public class AnimalService {
     private Animal transition(int animalId, AnimalStatus expected, AnimalStatus next) throws ShelterException {
         Animal animal = requireExisting(animalId);
         if (animal.getStatus() != expected) {
-            throw new ValidationException("status", "Expected " + expected + " but was " + animal.getStatus());
+            throw new ValidationException("статус", "Ожидался " + expected + ", текущий: " + animal.getStatus());
         }
         animal.setStatus(next);
         return animalRepo.update(animal);

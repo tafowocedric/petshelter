@@ -16,13 +16,11 @@ public class Cat extends Animal {
     public boolean isIndoor() { return isIndoor; }
     public void setIndoor(boolean indoor) { this.isIndoor = indoor; }
 
-    // [POLYMORPHISM]
     @Override
     public String makeSound() {
         return "Meow!";
     }
 
-    // [POLYMORPHISM]
     @Override
     public String getCareInstructions() {
         return isIndoor ? "Indoor cat — provide litter box and scratching post." : "Outdoor cat — ensure vaccinations are up to date.";

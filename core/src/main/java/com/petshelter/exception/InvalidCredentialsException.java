@@ -3,7 +3,7 @@ package com.petshelter.exception;
 
 public class InvalidCredentialsException extends ShelterException {
     public InvalidCredentialsException() {
-        super("Invalid username or password");
+        super("Неверное имя пользователя или пароль");
     }
 
     public InvalidCredentialsException(String message) {

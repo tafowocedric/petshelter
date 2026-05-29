@@ -24,10 +24,10 @@ public final class AnimalListView {
                     td(a.getStatus().name()),
                     td("").with(
                         span().cls("actions").with(
-                            a("/admin/animals/" + a.getId() + "/edit", "Edit"),
+                            a("/admin/animals/" + a.getId() + "/edit", "Редактировать"),
                             text(" "),
                             form().method("post").action("/admin/animals/" + a.getId() + "/delete").with(
-                                button("Delete")
+                                button("Удалить")
                             )
                         )
                     )
@@ -35,14 +35,14 @@ public final class AnimalListView {
             );
         }
 
-        return Layout.page("Animals", currentUser, notice, error,
-            h1("Animals"),
-            p("").with(a("/admin/animals/new", "+ Add animal")),
+        return Layout.page("Животные", currentUser, notice, error,
+            h1("Животные"),
+            p("").with(a("/admin/animals/new", "+ Добавить животное")),
             table().with(
                 thead().with(
                     tr().with(
-                        th("ID"), th("Name"), th("Species"), th("Breed"),
-                        th("Age"), th("Status"), th("Actions")
+                        th("ID"), th("Имя"), th("Вид"), th("Порода"),
+                        th("Возраст"), th("Статус"), th("Действия")
                     )
                 ),
                 tbody

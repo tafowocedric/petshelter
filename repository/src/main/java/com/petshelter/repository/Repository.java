@@ -5,13 +5,7 @@ import com.petshelter.exception.ShelterException;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Generic CRUD contract for all repositories.
- * [INTERFACES] [EXCEPTIONS]   — all methods declare ShelterException
- *
- * @param <T>  the entity type (Animal, User, Adoption, ...)
- * @param <ID> the type of the entity's primary key (usually Integer)
- */
+// Generic CRUD contract for all repositories.
 public interface Repository<T, ID> {
     T save(T entity) throws ShelterException;
     T update(T entity) throws ShelterException;

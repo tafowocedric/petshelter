@@ -75,6 +75,6 @@ public class AuthController {
         String token = req.cookie(SessionManager.COOKIE_NAME);
         sessions.destroy(token);
         return new Response(req.exchange()).clearCookie(SessionManager.COOKIE_NAME)
-            .redirect("/login?notice=Signed+out");
+            .redirect("/login?notice=" + java.net.URLEncoder.encode("Вы вышли из системы", java.nio.charset.StandardCharsets.UTF_8));
     }
 }

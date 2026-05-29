@@ -3,7 +3,7 @@ package com.petshelter.exception;
 
 public class DuplicateUserException extends ShelterException {
     public DuplicateUserException(String field, String value) {
-        super("User with " + field + " '" + value + "' already exists");
+        super("Пользователь с " + field + " '" + value + "' уже существует");
     }
 
     public DuplicateUserException(String message) {

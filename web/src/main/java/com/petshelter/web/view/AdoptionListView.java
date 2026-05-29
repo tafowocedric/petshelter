@@ -13,17 +13,17 @@ public final class AdoptionListView {
     private AdoptionListView() {}
 
     public static String render(User currentUser, List<JoinedAdoption> adoptions, String selectedStatus, String notice, String error) {
-        return Layout.page("Adoptions", currentUser, notice, error,
-            h1("Adoption requests"),
+        return Layout.page("Усыновления", currentUser, notice, error,
+            h1("Заявки на усыновление"),
             filterBar(selectedStatus),
-            adoptions.isEmpty() ? p("No adoptions match this filter.").cls("muted") : adoptionsTable(adoptions)
+            adoptions.isEmpty() ? p("Усыновлений по этому фильтру не найдено.").cls("muted") : adoptionsTable(adoptions)
         );
     }
 
     private static Element filterBar(String selected) {
         Element form = form().method("get").action("/admin/adoptions");
         Element select = select("status");
-        select.with(option("", "All statuses"));
+        select.with(option("", "Все статусы"));
         for (AdoptionStatus s : AdoptionStatus.values()) {
             Element opt = option(s.name(), s.name());
 
@@ -31,8 +31,8 @@ public final class AdoptionListView {
             select.with(opt);
         }
         return form.with(
-            label("Filter by status").with(select),
-            button("Filter")
+            label("Фильтр по статусу").with(select),
+            button("Применить")
         );
     }
 
@@ -54,8 +54,8 @@ public final class AdoptionListView {
         return table().with(
             thead().with(
                 tr().with(
-                    th("ID"), th("Date"), th("Animal"), th("Client"),
-                    th("Status"), th("Actions")
+                    th("ID"), th("Дата"), th("Животное"), th("Клиент"),
+                    th("Статус"), th("Действия")
                 )
             ),
             tbody
@@ -66,12 +66,12 @@ public final class AdoptionListView {
         switch (status) {
             case PENDING:
                 return span().cls("actions").with(
-                    form().method("post").action("/admin/adoptions/" + id + "/approve").with(button("Approve")),
+                    form().method("post").action("/admin/adoptions/" + id + "/approve").with(button("Одобрить")),
                     text(" "),
-                    form().method("post").action("/admin/adoptions/" + id + "/reject").with(button("Reject"))
+                    form().method("post").action("/admin/adoptions/" + id + "/reject").with(button("Отклонить"))
                 );
             case APPROVED:
-                return form().method("post").action("/admin/adoptions/" + id + "/complete").with(button("Mark completed"));
+                return form().method("post").action("/admin/adoptions/" + id + "/complete").with(button("Завершить"));
             default:
                 return span().cls("muted").text("—");
         }

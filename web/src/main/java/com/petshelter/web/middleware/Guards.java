@@ -16,14 +16,14 @@ public final class Guards {
         return req -> CurrentUser.from(req, sessions)
             .map(u -> safeHandle(next, req))
             .orElseGet(() -> new Response(req.exchange())
-                .redirect("/login?error=Please+sign+in"));
+                .redirect("/login?error=" + java.net.URLEncoder.encode("Необходимо войти в систему", java.nio.charset.StandardCharsets.UTF_8)));
     }
 
     public static Controller adminOnly(SessionManager sessions, Controller next) {
         return req -> {
             User user = CurrentUser.from(req, sessions).orElse(null);
             if (user == null) {
-                return new Response(req.exchange()).redirect("/login?error=Please+sign+in");
+                return new Response(req.exchange()).redirect("/login?error=" + java.net.URLEncoder.encode("Необходимо войти в систему", java.nio.charset.StandardCharsets.UTF_8));
             }
             if (!(user instanceof Admin)) {
                 return new Response(req.exchange()).status(403).html(ErrorView.forbidden(user));

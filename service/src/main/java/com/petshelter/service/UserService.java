@@ -11,10 +11,7 @@ import com.petshelter.repository.UserRepository;
 
 import java.util.List;
 
-/**
- * Business logic for User management — used by the admin dashboard to view, edit, and remove client accounts.
- * [POLYMORPHISM] [EXCEPTIONS]
- */
+// User management — admin dashboard: view, edit, remove client accounts.
 public class UserService {
     private final UserRepository userRepo;
     private final AuthService authService;
@@ -47,7 +44,7 @@ public class UserService {
     // UPDATE
     public User updateProfile(User actor, User updated) throws ShelterException {
         if (updated.getId() == null) {
-            throw new ValidationException("id", "Cannot update user without id");
+            throw new ValidationException("id", "Нельзя обновить пользователя без id");
         }
 
         requireSelfOrAdmin(actor, updated.getId(), "update profile");

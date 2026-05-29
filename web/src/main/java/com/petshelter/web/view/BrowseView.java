@@ -13,18 +13,18 @@ public final class BrowseView {
     private BrowseView() {}
 
     public static String render(User currentUser, List<Animal> animals, String selectedSpecies, String notice, String error) {
-        return Layout.page("Browse animals", currentUser, notice, error,
-            h1("Browse animals"),
-            p("These animals are looking for a home.").cls("muted"),
+        return Layout.page("Каталог животных", currentUser, notice, error,
+            h1("Каталог животных"),
+            p("Эти животные ищут дом.").cls("muted"),
             filterBar(selectedSpecies),
-            animals.isEmpty()? p("No animals match this filter.").cls("muted") : animalsGrid(animals)
+            animals.isEmpty()? p("Животных по этому фильтру не найдено.").cls("muted") : animalsGrid(animals)
         );
     }
 
     private static Element filterBar(String selected) {
         Element form = form().method("get").action("/browse");
         Element select = select("species");
-        select.with(option("", "All species"));
+        select.with(option("", "Все виды"));
 
         for (Species s : Species.values()) {
             Element opt = option(s.name(), s.name());
@@ -32,7 +32,7 @@ public final class BrowseView {
             if (s.name().equals(selected)) opt.attr("selected", "selected");
             select.with(opt);
         }
-        return form.with(label("Filter by species").with(select), button("Filter"));
+        return form.with(label("Фильтр по виду").with(select), button("Применить"));
     }
 
     private static Element animalsGrid(List<Animal> animals) {
@@ -47,7 +47,7 @@ public final class BrowseView {
                     td(String.valueOf(a.getAge())),
                     td(a.getGender() == null ? "—" : a.getGender().name()),
                     td("").with(
-                        a("/animals/" + a.getId(), "View")
+                        a("/animals/" + a.getId(), "Просмотр")
                     )
                 )
             );
@@ -55,8 +55,8 @@ public final class BrowseView {
         return table().with(
             thead().with(
                 tr().with(
-                    th("ID"), th("Name"), th("Species"), th("Breed"),
-                    th("Age"), th("Gender"), th("")
+                    th("ID"), th("Имя"), th("Вид"), th("Порода"),
+                    th("Возраст"), th("Пол"), th("")
                 )
             ),
             tbody

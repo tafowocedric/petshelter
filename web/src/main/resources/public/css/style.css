@@ -119,3 +119,7 @@ body {
     gap: 5px;
     width: 100%;
 }
+
+a {
+    color: var(--accent)
+}

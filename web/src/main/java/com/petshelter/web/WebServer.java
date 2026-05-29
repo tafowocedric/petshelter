@@ -1,5 +1,7 @@
 package com.petshelter.web;
 
+import com.sun.net.httpserver.HttpServer;
+
 import com.petshelter.enums.AdoptionStatus;
 import com.petshelter.enums.AnimalStatus;
 import com.petshelter.repository.AdoptionRepository;
@@ -17,7 +19,8 @@ import com.petshelter.web.session.SessionManager;
 import com.petshelter.web.view.AdminDashboardView;
 import com.petshelter.web.view.BrowseView;
 import com.petshelter.web.view.HomeView;
-import com.sun.net.httpserver.HttpServer;
+import com.petshelter.service.UserService;
+import com.petshelter.web.controller.UserController;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -32,6 +35,8 @@ public class WebServer {
     private final AdoptionRepository adoptionRepo = new AdoptionRepository();
     private final AuthService authService = new AuthService(userRepo);
     private final AnimalService animalService = new AnimalService(animalRepo, authService);
+    private final UserService userService = new UserService(userRepo, authService);
+    private final UserController userController = new UserController(userService, sessions);
 
     private final AuthController authController = new AuthController(authService, sessions);
     private final AnimalController animalController = new AnimalController(animalService, sessions);
@@ -72,6 +77,10 @@ public class WebServer {
         router.get("/admin/animals/:id/edit", Guards.adminOnly(sessions, animalController::editForm));
         router.post("/admin/animals/:id/edit", Guards.adminOnly(sessions, animalController::update));
         router.post("/admin/animals/:id/delete", Guards.adminOnly(sessions, animalController::delete));
+
+        // Admin — user management
+        router.get("/admin/users", Guards.adminOnly(sessions, userController::list));
+        router.post("/admin/users/:id/delete", Guards.adminOnly(sessions, userController::delete));
 
         // Client
         router.get("/browse", Guards.authenticated(sessions, req ->

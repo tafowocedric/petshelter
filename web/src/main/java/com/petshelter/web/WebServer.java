@@ -23,6 +23,7 @@ import com.petshelter.web.view.HomeView;
 import com.petshelter.service.UserService;
 import com.petshelter.web.controller.UserController;
 import com.petshelter.web.controller.AdoptionController;
+import com.petshelter.web.controller.ClientController;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -44,6 +45,7 @@ public class WebServer {
     private final AdoptionController adoptionController = new AdoptionController(adoptionService, sessions);
     private final AuthController authController = new AuthController(authService, sessions);
     private final AnimalController animalController = new AnimalController(animalService, sessions);
+    private final ClientController clientController = new ClientController(animalService, adoptionService, sessions);
 
     private HttpServer server;
 
@@ -74,7 +76,7 @@ public class WebServer {
             return new Response(req.exchange()).html(AdminDashboardView.render(current, total, avail, adopted, pending));
         }));
 
-        // Admin — animals CRUD
+        // Admin animals CRUD
         router.get("/admin/animals", Guards.adminOnly(sessions, animalController::list));
         router.get("/admin/animals/new", Guards.adminOnly(sessions, animalController::newForm));
         router.post("/admin/animals/new", Guards.adminOnly(sessions, animalController::create));
@@ -82,20 +84,22 @@ public class WebServer {
         router.post("/admin/animals/:id/edit", Guards.adminOnly(sessions, animalController::update));
         router.post("/admin/animals/:id/delete", Guards.adminOnly(sessions, animalController::delete));
 
-        // Admin — user management
+        // Admin user management
         router.get("/admin/users", Guards.adminOnly(sessions, userController::list));
         router.post("/admin/users/:id/delete", Guards.adminOnly(sessions, userController::delete));
 
-        // Admin — adoption approval
+        // Admin adoption approval
         router.get("/admin/adoptions", Guards.adminOnly(sessions, adoptionController::list));
         router.post("/admin/adoptions/:id/approve", Guards.adminOnly(sessions, adoptionController::approve));
         router.post("/admin/adoptions/:id/reject", Guards.adminOnly(sessions, adoptionController::reject));
         router.post("/admin/adoptions/:id/complete", Guards.adminOnly(sessions, adoptionController::complete));
 
-        // Client
-        router.get("/browse", Guards.authenticated(sessions, req ->
-            new Response(req.exchange()).html(BrowseView.render(CurrentUser.from(req, sessions).orElseThrow()))
-        ));
+        // Client routes
+        router.get("/browse", Guards.authenticated(sessions, clientController::browse));
+        router.get("/animals/:id", Guards.authenticated(sessions, clientController::detail));
+        router.post("/animals/:id/adopt", Guards.authenticated(sessions, clientController::requestAdoption));
+        router.get("/my-adoptions", Guards.authenticated(sessions, clientController::myAdoptions));
+        router.post("/my-adoptions/:id/cancel", Guards.authenticated(sessions, clientController::cancelAdoption));
     }
 
     public void start() throws IOException {

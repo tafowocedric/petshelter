@@ -1,5 +1,6 @@
 package com.petshelter.web;
 
+import com.petshelter.service.AdoptionService;
 import com.sun.net.httpserver.HttpServer;
 
 import com.petshelter.enums.AdoptionStatus;
@@ -21,6 +22,7 @@ import com.petshelter.web.view.BrowseView;
 import com.petshelter.web.view.HomeView;
 import com.petshelter.service.UserService;
 import com.petshelter.web.controller.UserController;
+import com.petshelter.web.controller.AdoptionController;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -36,8 +38,10 @@ public class WebServer {
     private final AuthService authService = new AuthService(userRepo);
     private final AnimalService animalService = new AnimalService(animalRepo, authService);
     private final UserService userService = new UserService(userRepo, authService);
-    private final UserController userController = new UserController(userService, sessions);
+    private final AdoptionService adoptionService = new AdoptionService(adoptionRepo, animalRepo, userRepo, animalService, authService);
 
+    private final UserController userController = new UserController(userService, sessions);
+    private final AdoptionController adoptionController = new AdoptionController(adoptionService, sessions);
     private final AuthController authController = new AuthController(authService, sessions);
     private final AnimalController animalController = new AnimalController(animalService, sessions);
 
@@ -81,6 +85,12 @@ public class WebServer {
         // Admin — user management
         router.get("/admin/users", Guards.adminOnly(sessions, userController::list));
         router.post("/admin/users/:id/delete", Guards.adminOnly(sessions, userController::delete));
+
+        // Admin — adoption approval
+        router.get("/admin/adoptions", Guards.adminOnly(sessions, adoptionController::list));
+        router.post("/admin/adoptions/:id/approve", Guards.adminOnly(sessions, adoptionController::approve));
+        router.post("/admin/adoptions/:id/reject", Guards.adminOnly(sessions, adoptionController::reject));
+        router.post("/admin/adoptions/:id/complete", Guards.adminOnly(sessions, adoptionController::complete));
 
         // Client
         router.get("/browse", Guards.authenticated(sessions, req ->

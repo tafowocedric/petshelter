@@ -128,5 +128,8 @@ table, th, td {
   border: 1px solid black;
   border-collapse: collapse;
   padding: 8px;
+}
 
+tr:nth-child(even) {
+  background-color: #1a2f2fde;
 }

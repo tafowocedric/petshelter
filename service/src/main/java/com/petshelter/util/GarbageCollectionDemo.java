@@ -21,7 +21,7 @@ public final class GarbageCollectionDemo {
         }
 
         long afterAlloc = usedMb(rt);
-        System.out.println("[GC] Used heap (after  allocation): " + afterAlloc + " MB");
+        System.out.println("[GC] Used heap (after allocation): " + afterAlloc + " MB");
 
         bigData = null;
         System.gc();
@@ -34,10 +34,10 @@ public final class GarbageCollectionDemo {
         }
 
         long afterGc = usedMb(rt);
-        System.out.println("[GC] Used heap (after  System.gc): " + afterGc + " MB");
+        System.out.println("[GC] Used heap (after System.gc): " + afterGc + " MB");
 
         long reclaimed = afterAlloc - afterGc;
-        System.out.println("[GC] Memory reclaimed:               " + reclaimed + " MB");
+        System.out.println("[GC] Memory reclaimed: " + reclaimed + " MB");
         System.out.println("[GC] (JVM is not required to honor System.gc(); results vary.)");
     }
 

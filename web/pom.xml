@@ -27,10 +27,6 @@
             <groupId>com.petshelter</groupId>
             <artifactId>repository</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.github.jknack</groupId>
-            <artifactId>handlebars</artifactId>
-        </dependency>
     </dependencies>
 
 </project>

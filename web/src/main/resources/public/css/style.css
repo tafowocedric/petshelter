@@ -24,6 +24,17 @@ body {
     padding: 1rem 2rem;
     background: var(--bg-panel);
     border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+}
+
+.topbar .nav {
+    display: flex;
+    gap: 10px
+}
+
+.topbar .header-nav-item {
+    color: white;
 }
 
 .brand {
@@ -85,3 +96,26 @@ body {
     border: 1px solid var(--border);
 }
 .btn.ghost:hover { background: var(--bg-card); }
+
+.muted-link { color: var(--accent); text-decoration: none; }
+.muted-link:hover { text-decoration: underline; }
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 400px;
+    padding: 10px;
+}
+
+.input-form {
+    padding: 5px;
+    border-radius: 5px;
+    flex-grow: 1;
+}
+
+.form-label {
+    display: flex;
+    gap: 5px;
+    width: 100%;
+}

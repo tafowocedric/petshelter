@@ -1,38 +1,58 @@
 package com.petshelter.web;
 
+import com.petshelter.repository.UserRepository;
+import com.petshelter.service.AuthService;
+import com.petshelter.web.controller.AuthController;
+import com.petshelter.web.http.Response;
+import com.petshelter.web.middleware.Guards;
 import com.petshelter.web.routing.Router;
-import com.petshelter.web.template.TemplateEngine;
+import com.petshelter.web.session.CurrentUser;
+import com.petshelter.web.session.SessionManager;
+import com.petshelter.web.view.AdminDashboardView;
+import com.petshelter.web.view.BrowseView;
+import com.petshelter.web.view.HomeView;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.HashMap;
-import java.util.Map;
 
 public class WebServer {
+
     private final int port;
-    private final Router router;
-    private final TemplateEngine templates;
+    private final Router router = new Router();
+    private final SessionManager sessions = new SessionManager();
+    private final AuthController authController;
     private HttpServer server;
 
     public WebServer(int port) {
         this.port = port;
-        this.router = new Router();
-        this.templates = new TemplateEngine();
-        registerDefaultRoutes();
+        AuthService authService = new AuthService(new UserRepository());
+        this.authController = new AuthController(authService, sessions);
+        registerRoutes();
     }
 
-    public Router router() { return router; }
-    public TemplateEngine templates() { return templates; }
+    private void registerRoutes() {
+        router.get("/", req -> new Response(req.exchange()).html(
+                HomeView.render(CurrentUser.from(req, sessions).orElse(null))
+        ));
 
-    private void registerDefaultRoutes() {
-        router.get("/", req -> {
-            Map<String, Object> ctx = new HashMap<>();
-            ctx.put("title", "Pet Shelter");
-            ctx.put("message", "Welcome to the Pet Shelter Management System!");
-            return new com.petshelter.web.http.Response(req.exchange())
-                    .html(templates.render("home", ctx));
-        });
+        router.get("/login",     authController::showLogin);
+        router.post("/login",    authController::doLogin);
+        router.get("/register",  authController::showRegister);
+        router.post("/register", authController::doRegister);
+        router.post("/logout",   authController::logout);
+
+        router.get("/admin", Guards.adminOnly(sessions, req ->
+                new Response(req.exchange()).html(
+                        AdminDashboardView.render(CurrentUser.from(req, sessions).orElseThrow())
+                )
+        ));
+
+        router.get("/browse", Guards.authenticated(sessions, req ->
+                new Response(req.exchange()).html(
+                        BrowseView.render(CurrentUser.from(req, sessions).orElseThrow())
+                )
+        ));
     }
 
     public void start() throws IOException {

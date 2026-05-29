@@ -29,6 +29,10 @@
             <groupId>com.petshelter</groupId>
             <artifactId>service</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.petshelter</groupId>
+            <artifactId>web</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

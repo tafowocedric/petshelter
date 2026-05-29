@@ -17,6 +17,7 @@
         <module>core</module>
         <module>repository</module>
         <module>service</module>
+        <module>web</module>
         <module>app</module>
     </modules>
 
@@ -26,6 +27,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <postgresql.version>42.7.3</postgresql.version>
         <bcrypt.version>0.10.2</bcrypt.version>
+        <handlebars.version>4.3.1</handlebars.version>
     </properties>
 
     <dependencyManagement>
@@ -39,6 +41,11 @@
                 <groupId>at.favre.lib</groupId>
                 <artifactId>bcrypt</artifactId>
                 <version>${bcrypt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.jknack</groupId>
+                <artifactId>handlebars</artifactId>
+                <version>${handlebars.version}</version>
             </dependency>
 
             <dependency>
@@ -59,6 +66,11 @@
             <dependency>
                 <groupId>com.petshelter</groupId>
                 <artifactId>service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.petshelter</groupId>
+                <artifactId>web</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

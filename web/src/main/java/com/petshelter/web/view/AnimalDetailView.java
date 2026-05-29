@@ -50,8 +50,10 @@ public final class AnimalDetailView {
             return p("This animal is not currently available for adoption.").cls("muted");
         }
         return form().method("post").action("/animals/" + animal.getId() + "/adopt").with(
-            label("Notes (optional)").with(
-                textarea("notes").attr("rows", "3").attr("placeholder", "Why you'd be a good fit...")
+            label("Notes (optional)").cls("form-label").with(
+                textarea("notes").id("client-note").attr("rows", "5")
+                    .attr("style", "width: 450px; height: 120px")
+                    .attr("placeholder", "Why you'd be a good fit...")
             ),
             button("Request adoption")
         );

@@ -134,3 +134,7 @@ table, th, td {
 tr:nth-child(even) {
   background-color: #1a2f2fde;
 }
+
+#client-note {
+    padding: 10px;
+}

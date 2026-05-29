@@ -15,7 +15,7 @@ public final class GarbageCollectionDemo {
         long beforeAlloc = usedMb(rt);
         System.out.println("[GC] Used heap (before allocation): " + beforeAlloc + " MB");
 
-        int[] bigData = new int[12_500_000];     // 12.5M * 4 bytes ≈ 50 MB
+        int[] bigData = new int[12_500_000]; // 12.5M * 4 bytes ≈ 50 MB
         for (int i = 0; i < bigData.length; i++) {
             bigData[i] = i;
         }

@@ -4,6 +4,9 @@ import com.petshelter.web.controller.Controller;
 import com.petshelter.web.http.HttpMethod;
 import com.petshelter.web.http.Request;
 import com.petshelter.web.http.Response;
+import com.petshelter.web.session.CurrentUser;
+import com.petshelter.web.session.SessionManager;
+import com.petshelter.web.view.ErrorView;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -13,7 +16,13 @@ import java.util.List;
 import java.util.regex.Matcher;
 
 public class Router implements HttpHandler {
+
     private final List<Route> routes = new ArrayList<>();
+    private final SessionManager sessions;
+
+    public Router(SessionManager sessions) {
+        this.sessions = sessions;
+    }
 
     public Router get(String path, Controller c)    { return add(HttpMethod.GET, path, c); }
     public Router post(String path, Controller c)   { return add(HttpMethod.POST, path, c); }
@@ -45,11 +54,12 @@ public class Router implements HttpHandler {
                     return;
                 }
             }
-            response.status(404).html("<h1>404 Not Found</h1><p>" + request.path() + "</p>").send();
+            response.status(404).html(ErrorView.notFound(CurrentUser.from(request, sessions).orElse(null),
+                request.path())).send();
         } catch (Exception e) {
             e.printStackTrace();
-            response.status(500).html("<h1>500 Internal Server Error</h1><pre>"
-                    + e.getMessage() + "</pre>").send();
+            response.status(500).html(ErrorView.serverError(CurrentUser.from(request, sessions).orElse(null),
+                e.getMessage())).send();
         }
     }
 }

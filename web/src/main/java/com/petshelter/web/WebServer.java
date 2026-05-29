@@ -30,8 +30,8 @@ import java.net.InetSocketAddress;
 
 public class WebServer {
     private final int port;
-    private final Router router = new Router();
     private final SessionManager sessions = new SessionManager();
+    private final Router router = new Router(sessions);
 
     private final AnimalRepository animalRepo = new AnimalRepository();
     private final UserRepository userRepo = new UserRepository();

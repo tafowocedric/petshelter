@@ -27,7 +27,7 @@ public final class AnimalListView {
                             a("/admin/animals/" + a.getId() + "/edit", "Edit"),
                             text(" "),
                             form().method("post").action("/admin/animals/" + a.getId() + "/delete").with(
-                                    button("Delete")
+                                button("Delete")
                             )
                         )
                     )

@@ -31,15 +31,15 @@ public final class AnimalFormView {
                     false).with(raw("")),
                 Layout.field("Color", "color", "text", val(existing, Animal::getColor), false),
                 Layout.field("Description", "description", "text", val(existing, Animal::getDescription), false),
-                Layout.field("Trained (dogs only — true/false)", "isTrained", "text",
+                Layout.field("Trained (dogs only [true/false])", "isTrained", "text",
                     existing instanceof Dog ? String.valueOf(((Dog) existing).isTrained()) : "", false),
-                Layout.field("Indoor (cats only — true/false)", "isIndoor", "text",
+                Layout.field("Indoor (cats only [true/false])", "isIndoor", "text",
                     existing instanceof Cat ? String.valueOf(((Cat) existing).isIndoor()) : "", false),
-                Layout.field("Can fly (birds only — true/false)", "canFly", "text",
+                Layout.field("Can fly (birds only [true/false])", "canFly", "text",
                     existing instanceof Bird ? String.valueOf(((Bird) existing).canFly()) : "", false),
                 button(editing ? "Save changes" : "Create animal")
             ),
-            p("").with(a("/admin/animals", "← Back to animals"))
+            p("").with(a("/admin/animals", "Back to animals"))
         );
     }
 

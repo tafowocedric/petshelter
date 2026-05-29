@@ -31,7 +31,7 @@ public final class AnimalDetailView {
             p("").with(strong("Sound: ")).with(text(animal.makeSound())),
             p("").with(strong("Care: ")).with(text(animal.getCareInstructions())),
             adoptButton(currentUser, animal),
-            p("").with(a("/browse", "← Back to browse"))
+            p("").with(a("/browse", "Back to browse"))
         );
     }
 

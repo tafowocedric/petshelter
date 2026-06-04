@@ -67,7 +67,7 @@ class DatabaseInitializer {
 
     private void seedUsers(Connection conn) throws SQLException {
         String hashedPassword = BCrypt.withDefaults().hashToString(12, "admin123".toCharArray());
-        String sql = "INSERT INTO users (username, password, full_name, email, phone, role) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT (username) DO NOTHING";
+        String sql = "INSERT OR IGNORE INTO users (username, password, full_name, email, phone, role) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             Object[][] users = {
                 {"admin",    hashedPassword, "System Administrator", "admin@shelter.com", "+1234567890", "ADMIN"},

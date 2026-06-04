@@ -13,6 +13,7 @@ import com.petshelter.model.Dog;
 
 import java.math.BigDecimal;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -57,7 +58,8 @@ public class AnimalRepository implements Repository<Animal, Integer> {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     animal.setId(rs.getInt("id"));
-                    animal.setArrivalDate(rs.getDate("arrival_date").toLocalDate());
+                    String d = rs.getString("arrival_date");
+                    if (d != null) animal.setArrivalDate(LocalDate.parse(d));
                 }
             }
             return animal;
@@ -240,8 +242,8 @@ public class AnimalRepository implements Repository<Animal, Integer> {
         ps.setString(8, a.getDescription());
         ps.setString(9, a.getStatus().name());
 
-        if (a.getArrivalDate() != null) ps.setDate(10, Date.valueOf(a.getArrivalDate()));
-        else ps.setNull(10, Types.DATE);
+        if (a.getArrivalDate() != null) ps.setString(10, a.getArrivalDate().toString());
+        else ps.setNull(10, Types.VARCHAR);
 
         // species-specific fields — only one is non-null per row
         setNullableBool(ps, 11, a instanceof Dog  ? ((Dog) a).isTrained() : null);
@@ -250,7 +252,7 @@ public class AnimalRepository implements Repository<Animal, Integer> {
     }
 
     private void setNullableBool(PreparedStatement ps, int idx, Boolean value) throws SQLException {
-        if (value == null) ps.setNull(idx, Types.BOOLEAN);
+        if (value == null) ps.setNull(idx, Types.INTEGER);
         else ps.setBoolean(idx, value);
     }
 
@@ -289,9 +291,9 @@ public class AnimalRepository implements Repository<Animal, Integer> {
 
         animal.setId(rs.getInt("id"));
         animal.setStatus(AnimalStatus.valueOf(rs.getString("status")));
-        Date arrival = rs.getDate("arrival_date");
+        String arrival = rs.getString("arrival_date");
         if (arrival != null) {
-            animal.setArrivalDate(arrival.toLocalDate());
+            animal.setArrivalDate(LocalDate.parse(arrival));
         }
         return animal;
     }

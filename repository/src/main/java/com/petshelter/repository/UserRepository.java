@@ -10,6 +10,7 @@ import com.petshelter.model.Client;
 import com.petshelter.model.User;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -65,7 +66,8 @@ public class UserRepository implements Repository<User, Integer> {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     user.setId(rs.getInt("id"));
-                    user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+                    String ts = rs.getString("created_at");
+                    if (ts != null) user.setCreatedAt(LocalDateTime.parse(ts.replace(' ', 'T')));
                 }
             }
             return user;
@@ -228,10 +230,8 @@ public class UserRepository implements Repository<User, Integer> {
                 : new Client(username, password, fullName, email, phone);
 
         user.setId(rs.getInt("id"));
-        Timestamp ts = rs.getTimestamp("created_at");
-        if (ts != null) {
-            user.setCreatedAt(ts.toLocalDateTime());
-        }
+        String ts = rs.getString("created_at");
+        if (ts != null) user.setCreatedAt(LocalDateTime.parse(ts.replace(' ', 'T')));
         return user;
     }
 }

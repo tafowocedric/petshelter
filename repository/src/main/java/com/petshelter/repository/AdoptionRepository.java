@@ -12,6 +12,8 @@ import com.petshelter.model.*;
 
 import java.math.BigDecimal;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -68,8 +70,8 @@ public class AdoptionRepository implements Repository<Adoption, Integer> {
 
             ps.setInt(1, adoption.getAnimalId());
             ps.setInt(2, adoption.getClientId());
-            ps.setDate(3, adoption.getAdoptionDate() != null
-                    ? Date.valueOf(adoption.getAdoptionDate()) : Date.valueOf(java.time.LocalDate.now()));
+            ps.setString(3, adoption.getAdoptionDate() != null
+                    ? adoption.getAdoptionDate().toString() : LocalDate.now().toString());
             ps.setString(4, adoption.getStatus().name());
             ps.setString(5, adoption.getNotes());
 
@@ -79,7 +81,8 @@ public class AdoptionRepository implements Repository<Adoption, Integer> {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     adoption.setId(rs.getInt("id"));
-                    adoption.setAdoptionDate(rs.getDate("adoption_date").toLocalDate());
+                    String d = rs.getString("adoption_date");
+                    if (d != null) adoption.setAdoptionDate(LocalDate.parse(d));
                 }
             }
             return adoption;
@@ -100,7 +103,7 @@ public class AdoptionRepository implements Repository<Adoption, Integer> {
 
             ps.setInt(1, adoption.getAnimalId());
             ps.setInt(2, adoption.getClientId());
-            ps.setDate(3, Date.valueOf(adoption.getAdoptionDate()));
+            ps.setString(3, adoption.getAdoptionDate().toString());
             ps.setString(4, adoption.getStatus().name());
             ps.setString(5, adoption.getNotes());
 
@@ -262,7 +265,8 @@ public class AdoptionRepository implements Repository<Adoption, Integer> {
         Adoption adoption = new Adoption(rs.getInt("animal_id"), rs.getInt("client_id"));
 
         adoption.setId(rs.getInt("adoption_id"));
-        adoption.setAdoptionDate(rs.getDate("adoption_date").toLocalDate());
+        String adoptDate = rs.getString("adoption_date");
+        if (adoptDate != null) adoption.setAdoptionDate(LocalDate.parse(adoptDate));
         adoption.setStatus(AdoptionStatus.valueOf(rs.getString("adoption_status")));
         adoption.setNotes(rs.getString("notes"));
 
@@ -311,10 +315,9 @@ public class AdoptionRepository implements Repository<Adoption, Integer> {
 
         animal.setId(rs.getInt("an_id"));
         animal.setStatus(AnimalStatus.valueOf(rs.getString("an_status")));
-        Date arrival = rs.getDate("an_arrival_date");
-
+        String arrival = rs.getString("an_arrival_date");
         if (arrival != null) {
-            animal.setArrivalDate(arrival.toLocalDate());
+            animal.setArrivalDate(LocalDate.parse(arrival));
         }
 
         return animal;
@@ -333,9 +336,8 @@ public class AdoptionRepository implements Repository<Adoption, Integer> {
                 : new Client(username, password, fullName, email, phone);
 
         user.setId(rs.getInt("u_id"));
-        Timestamp ts = rs.getTimestamp("u_created_at");
-
-        if (ts != null) user.setCreatedAt(ts.toLocalDateTime());
+        String ts = rs.getString("u_created_at");
+        if (ts != null) user.setCreatedAt(LocalDateTime.parse(ts.replace(' ', 'T')));
         return user;
     }
 

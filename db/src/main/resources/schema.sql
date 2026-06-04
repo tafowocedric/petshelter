@@ -1,45 +1,43 @@
 
 CREATE TABLE IF NOT EXISTS users (
-    id           SERIAL PRIMARY KEY,
-    username     VARCHAR(50) UNIQUE NOT NULL,
-    password     VARCHAR(255) NOT NULL,
-    full_name    VARCHAR(100) NOT NULL,
-    email        VARCHAR(100) UNIQUE NOT NULL,
-    phone        VARCHAR(20),
-    role         VARCHAR(20) NOT NULL CHECK (role IN ('ADMIN', 'CLIENT')),
-    created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    username     TEXT UNIQUE NOT NULL,
+    password     TEXT NOT NULL,
+    full_name    TEXT NOT NULL,
+    email        TEXT UNIQUE NOT NULL,
+    phone        TEXT,
+    role         TEXT NOT NULL CHECK (role IN ('ADMIN', 'CLIENT')),
+    created_at   TEXT DEFAULT CURRENT_TIMESTAMP
 );
 
-
 CREATE TABLE IF NOT EXISTS animals (
-    id            SERIAL PRIMARY KEY,
-    name          VARCHAR(50) NOT NULL,
-    species       VARCHAR(20) NOT NULL CHECK (species IN ('DOG', 'CAT', 'BIRD')),
-    breed         VARCHAR(50),
-    age           INT CHECK (age >= 0),
-    gender        VARCHAR(10) CHECK (gender IN ('MALE', 'FEMALE')),
-    weight        DECIMAL(5,2),
-    color         VARCHAR(30),
+    id            INTEGER PRIMARY KEY AUTOINCREMENT,
+    name          TEXT NOT NULL,
+    species       TEXT NOT NULL CHECK (species IN ('DOG', 'CAT', 'BIRD')),
+    breed         TEXT,
+    age           INTEGER CHECK (age >= 0),
+    gender        TEXT CHECK (gender IN ('MALE', 'FEMALE')),
+    weight        REAL,
+    color         TEXT,
     description   TEXT,
-    status        VARCHAR(20) DEFAULT 'AVAILABLE' CHECK (status IN ('AVAILABLE', 'PENDING', 'ADOPTED')),
-    arrival_date  DATE DEFAULT CURRENT_DATE,
-    is_trained    BOOLEAN,
-    is_indoor     BOOLEAN,
-    can_fly       BOOLEAN
+    status        TEXT DEFAULT 'AVAILABLE' CHECK (status IN ('AVAILABLE', 'PENDING', 'ADOPTED')),
+    arrival_date  TEXT DEFAULT CURRENT_DATE,
+    is_trained    INTEGER,
+    is_indoor     INTEGER,
+    can_fly       INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS adoptions (
-    id              SERIAL PRIMARY KEY,
-    animal_id       INT NOT NULL REFERENCES animals(id) ON DELETE CASCADE,
-    client_id       INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    adoption_date   DATE DEFAULT CURRENT_DATE,
-    status          VARCHAR(20) DEFAULT 'PENDING' CHECK (status IN ('PENDING', 'APPROVED', 'REJECTED', 'COMPLETED')),
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    animal_id       INTEGER NOT NULL REFERENCES animals(id) ON DELETE CASCADE,
+    client_id       INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    adoption_date   TEXT DEFAULT CURRENT_DATE,
+    status          TEXT DEFAULT 'PENDING' CHECK (status IN ('PENDING', 'APPROVED', 'REJECTED', 'COMPLETED')),
     notes           TEXT,
-    approved_by     INT REFERENCES users(id),
+    approved_by     INTEGER REFERENCES users(id),
 
     UNIQUE(animal_id, client_id, adoption_date)
 );
-
 
 CREATE INDEX IF NOT EXISTS idx_animals_status   ON animals(status);
 CREATE INDEX IF NOT EXISTS idx_animals_species  ON animals(species);

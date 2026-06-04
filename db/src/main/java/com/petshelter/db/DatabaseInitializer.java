@@ -39,7 +39,9 @@ class DatabaseInitializer {
     private void createSchema(Connection conn) throws SQLException, IOException {
         String sql = loadResource("schema.sql");
         try (Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
+            for (String statement : splitStatements(sql)) {
+                stmt.execute(statement);
+            }
             System.out.println("[БД] Схема проверена/создана.");
         }
     }
@@ -56,7 +58,9 @@ class DatabaseInitializer {
         seedUsers(conn);
         String sql = loadResource("seed.sql");
         try (Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
+            for (String statement : splitStatements(sql)) {
+                stmt.execute(statement);
+            }
             System.out.println("[БД] Начальные данные загружены.");
         }
     }
@@ -85,5 +89,12 @@ class DatabaseInitializer {
                 return reader.lines().collect(Collectors.joining("\n"));
             }
         }
+    }
+
+    private String[] splitStatements(String sql) {
+        return java.util.Arrays.stream(sql.split(";"))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toArray(String[]::new);
     }
 }

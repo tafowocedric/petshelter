@@ -11,8 +11,6 @@ import java.util.Properties;
 class DatabaseConnection {
     private static DatabaseConnection instance;
     private final String url;
-    private final String user;
-    private final String password;
 
     private DatabaseConnection() {
         Properties props = new Properties();
@@ -26,14 +24,6 @@ class DatabaseConnection {
         }
 
         this.url = props.getProperty("db.url");
-        this.user = props.getProperty("db.user");
-        this.password = props.getProperty("db.password");
-
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new DatabaseException("PostgreSQL JDBC driver not found", e);
-        }
     }
 
     static synchronized DatabaseConnection getInstance() {
@@ -44,6 +34,10 @@ class DatabaseConnection {
     }
 
     Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(url, user, password);
+        Connection conn = DriverManager.getConnection(url);
+        try (var stmt = conn.createStatement()) {
+            stmt.execute("PRAGMA foreign_keys = ON");
+        }
+        return conn;
     }
 }
